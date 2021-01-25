@@ -7,4 +7,8 @@
     <string name="btn_createProduct">Create Product</string>
     <string name="btn_productManager">Product Manager</string>
     <string name="txt_greeting">Welcome, </string>
+    <string name="lbl_nameProduct">Name of product</string>
+    <string name="lbl_weightProduct">Weight of product</string>
+    <string name="lbl_priceProduct">Unit Price</string>
+    <string name="btn_sendProduct">SEND PRODUCT</string>
 </resources>
