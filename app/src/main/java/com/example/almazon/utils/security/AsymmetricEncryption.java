@@ -2,6 +2,8 @@ package com.example.almazon.utils.security;
 
 import android.util.Base64;
 
+import org.apache.commons.codec.DecoderException;
+
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -55,9 +57,14 @@ public class AsymmetricEncryption {
         try {
             /*El metodo comentado es el que tenemos nosotros en la app de escritorio. Abajo he dejado
             lo que creo que puede servir*/
-
+            /*
+            Lo de abajo parece ser que funciona, lo que no se es si funciona correctamente, ya que
+            llega a la base de datos encriptada pero luego al comprobar las contraseñas hasheadas
+            casca en el lado servidor, en cambio desde el lado cliente no da ningun problema
+             */
             //byte[] keyBytes = DatatypeConverter.parseHexBinary(this.getPublicKeyAsString());
-            byte[] keyBytes = Base64.decode(this.getPublicKeyAsString(), Base64.DEFAULT);
+            //byte[] keyBytes = Base64.decode(this.getPublicKeyAsString(), Base64.DEFAULT);
+            byte[] keyBytes = org.apache.commons.codec.binary.Hex.decodeHex(this.getPublicKeyAsString().toCharArray());
 
 
             X509EncodedKeySpec spec
@@ -68,6 +75,8 @@ public class AsymmetricEncryption {
             Logger.getLogger(AsymmetricEncryption.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(AsymmetricEncryption.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DecoderException e) {
+            e.printStackTrace();
         }
         return null;
     }
