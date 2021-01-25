@@ -4,4 +4,7 @@
     <string name="txt_username">Username</string>
     <string name="txt_password">Password</string>
     <string name="txt_remember">Remember Me</string>
+    <string name="btn_createProduct">Create Product</string>
+    <string name="btn_productManager">Product Manager</string>
+    <string name="txt_greeting">Welcome, </string>
 </resources>
