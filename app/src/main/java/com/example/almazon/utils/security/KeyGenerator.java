@@ -20,7 +20,7 @@ public class KeyGenerator {
             String plainText,
             PublicKey publicKey)
             throws Exception {
-        Cipher cipher = Cipher.getInstance(RSA);
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         return cipher.doFinal(plainText.getBytes());

@@ -1,7 +1,15 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.example.almazon.utils.security;
 
-import android.util.Base64;
+import com.example.almazon.utils.security.KeyGenerator;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -10,14 +18,12 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*Al no existir el DatatypeConverter, en esta clase da error. Sin embargo, he leido que android ya trae una
-libreria con la que se puede hacer la misma operación, llamada Base64. Es la misma que creo que intento
-usar Mikel en la encriptación en un primer momento (pero en la app escritorio), ya que tiene metodos comentados.
-Si no funciona, he leido que hay tambien una libreria Apache, pero no es una opción muy recomendable.
-He comentado los metodos mas abajo.
+/**
+ *
+ * @author Mikel
  */
-
 public class AsymmetricEncryption {
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
     private String publicKey;
 
@@ -53,12 +59,7 @@ public class AsymmetricEncryption {
      */
     private PublicKey getPublicKey() {
         try {
-            /*El metodo comentado es el que tenemos nosotros en la app de escritorio. Abajo he dejado
-            lo que creo que puede servir*/
-
-            //byte[] keyBytes = DatatypeConverter.parseHexBinary(this.getPublicKeyAsString());
-            byte[] keyBytes = Base64.decode(this.getPublicKeyAsString(), Base64.DEFAULT);
-
+            byte[] keyBytes = toByteArray(this.getPublicKeyAsString());
 
             X509EncodedKeySpec spec
                     = new X509EncodedKeySpec(keyBytes);
@@ -75,12 +76,17 @@ public class AsymmetricEncryption {
     /**
      * Converts a ByteArray into a HexString String
      *
-     * @param array
+     * @param bytes
      * @return the string in HexString format
      */
-    private static String toHexString(byte[] array) {
-        //return DatatypeConverter.printHexBinary(array);
-        return Base64.encodeToString(array, Base64.DEFAULT);
+    public String toHexString(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 
     /**
@@ -89,10 +95,14 @@ public class AsymmetricEncryption {
      * @param s The String to convert into ByteArray
      * @return a ByteArray.
      */
-    private static byte[] toByteArray(String s) {
-        //return DatatypeConverter.parseHexBinary(s);
-        return Base64.decode(s, Base64.DEFAULT);
-
+    public static byte[] toByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 
     /**
@@ -121,4 +131,3 @@ public class AsymmetricEncryption {
      */
 
 }
-
