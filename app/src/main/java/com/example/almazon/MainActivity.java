@@ -14,9 +14,9 @@ import com.example.almazon.activities.WelcomeActivity;
 import com.example.almazon.models.Company;
 import com.example.almazon.models.User;
 import com.example.almazon.models.UserPrivilege;
+import com.example.almazon.utils.security.AsymmetricEncryption;
 import com.example.almazon.models.UserStatus;
 import com.example.almazon.retrofit.UserApiService;
-import com.example.almazon.utils.security.AsymmetricEncryption;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -30,9 +30,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final String TAG = MainActivity.class.getSimpleName();
-    static final String BASE_URL = "http://192.168.0.19:8080/CRUD-Server/webresources/";
+    static final String BASE_URL = "http://192.168.0.29:8080/CRUD-Server/webresources/";
     static Retrofit retrofit = null;
-    private AsymmetricEncryption ae;
+    private AsymmetricEncryption  ae;
     private String pk;
 
     public static final int WELCOME_ACTIVITY = 1;
@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 /*Aqui se accede al String de la public Key con el metodo response.body();
                 ¿Hay que asignarselo a una variable y, cuando hagamos el login, encriptarlo?
                  */
-
                 ae = new AsymmetricEncryption(response.body());
+                System.out.println("mikel maricón");
             }
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         welcomeActivity.putExtra("user",user);
         startActivity(welcomeActivity);*/
         User user = new User();
-        user.setUsername("hensly");
+        user.setUsername("mikel");
         user.setPassword(ae.encryptString("1234$%Mm"));
         UserApiService userApiService = retrofit.create(UserApiService.class);
         Call<User> call = userApiService.loginUser(user);
