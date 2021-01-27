@@ -37,6 +37,13 @@ public class CreateProductActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         product = new Product();
+        product.setName(txt_productName.getText().toString());
+
+        float numberUnit = Float.valueOf(txt_productUnit.getText().toString());
+        float numberWeight = Float.valueOf(txt_productWeight.getText().toString());
+
+        product.setPrice(numberUnit);
+        product.setWeight(numberWeight);
 
     }
 }
