@@ -7,9 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.almazon.activities.DashboardActivity;
 import com.example.almazon.activities.WelcomeActivity;
 import com.example.almazon.models.Company;
 import com.example.almazon.models.User;
@@ -34,7 +36,8 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final String TAG = MainActivity.class.getSimpleName();
-    static final String BASE_URL = "http://192.168.20.158:8080/CRUD-Server/webresources/";
+    static final String BASE_URL = "http://192.168.0.29:8080/CRUD-Server/webresources/";
+    public static final int DASHBOARD_ACTIVITY = 3;
     static Retrofit retrofit = null;
     private AsymmetricEncryption ae;
     private String pk;
@@ -42,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int WELCOME_ACTIVITY = 1;
 
     private Button login = null;
-    private EditText txtUser = null;
-    private EditText txtPassword = null;
+    private EditText txtUser;
+    private EditText txtPassword;
     private User user;
 
 
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
+                Toast.makeText(getApplicationContext(), "Can't connect the server.", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, throwable.toString());
             }
         });
@@ -95,12 +99,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Intent welcomeActivity = new Intent(this, WelcomeActivity.class);
-        welcomeActivity.putExtra("user", user);
-        startActivity(welcomeActivity);
         User user = new User();
-        user.setUsername("mikelputa");
-        user.setPassword(ae.encryptString("1234$%Mm"));
+        user.setUsername(txtUser.getText().toString());
+        user.setPassword(ae.encryptString(txtPassword.getText().toString()));
         UserApiService userApiService = retrofit.create(UserApiService.class);
 
 
@@ -109,23 +110,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
 
-                System.out.println("Codigo error: " + response.code());
-             if(response.code() == 500){
-                 System.out.println("Triste");
-             }else{
-                 System.out.println("No triste");
-             }
+                System.out.println("Codigo http: " + response.code());
+                if (response.code() == 500) {
+                    Toast.makeText(getApplicationContext(), "Login incorrecto.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+                    intent.putExtra("user", response.body());
+                    startActivityForResult(intent, DASHBOARD_ACTIVITY);
+                }
 
-                User pelotas = response.body();
-                System.out.println(pelotas.getEmail());
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable throwable) {
 
-                System.out.println(throwable.getCause());
-                System.out.println(call.request().body());
-                System.out.println("BBBBBBBBBBBBBBB");
+                Toast.makeText(getApplicationContext(), "Eror al conectar con el servidor.", Toast.LENGTH_SHORT).show();
 
             }
         });
