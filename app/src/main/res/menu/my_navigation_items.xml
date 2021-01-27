@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/itemCreateProduct"
+        android:title="@string/btn_createProduct" />
+    <item
+        android:id="@+id/itemProductManager"
+        android:title="@string/btn_productManager" />
+</menu>
