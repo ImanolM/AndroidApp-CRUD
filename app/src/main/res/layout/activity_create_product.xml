@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.423" />
 
     <EditText
-        android:id="@+id/txt_productWeight"
+        android:id="@+id/txt_productName"
         android:layout_width="155dp"
         android:layout_height="44dp"
         android:ems="10"
@@ -68,7 +68,7 @@
         app:layout_constraintVertical_bias="0.341" />
 
     <EditText
-        android:id="@+id/txt_productName"
+        android:id="@+id/txt_productWeight"
         android:layout_width="155dp"
         android:layout_height="44dp"
         android:ems="10"

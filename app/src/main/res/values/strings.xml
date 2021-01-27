@@ -11,4 +11,12 @@
     <string name="lbl_weightProduct">Weight of product</string>
     <string name="lbl_priceProduct">Unit Price</string>
     <string name="btn_sendProduct">SEND PRODUCT</string>
+    <string name="lbl_ID">ID</string>
+    <string name="lbl_Name">Name</string>
+    <string name="lbl_Price">Unit Price</string>
+    <string name="lbl_Weight">Weight</string>
+    <string name="btn_requestProduct">Search</string>
+    <string name="btn_Edit">Edit</string>
+    <string name="btn_Delete">Delete</string>
+    <string name="btn_Update">UPDATE</string>
 </resources>
