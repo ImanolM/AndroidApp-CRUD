@@ -3,9 +3,12 @@ package com.example.almazon.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.simpleframework.xml.Root;
+
 import java.io.Serializable;
 import java.util.Date;
 
+@Root (name="user")
 public class User implements Serializable {
 
 
