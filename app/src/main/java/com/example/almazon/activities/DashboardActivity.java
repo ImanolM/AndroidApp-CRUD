@@ -8,24 +8,34 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.almazon.R;
 import com.google.android.material.navigation.NavigationView;
+import com.example.almazon.models.User;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private User user;
+    private TextView welcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        Intent intent = getIntent();
+        this.user = (User) intent.getSerializableExtra("user");
+
+
+        this.welcome = (TextView) findViewById(R.id.txt_greeting);
+        welcome.setText(user.getName());
         // Cogemos el NavigationMenu, que es donde estan todos los componentes, y le asignamos
         // el listener para estar a la escucha cuando el usuario clicke en algun elemento del
         // menu. Los siguientes items del menu estan asignanos en /res/menu/my_navigation_items.xml
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
     }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
