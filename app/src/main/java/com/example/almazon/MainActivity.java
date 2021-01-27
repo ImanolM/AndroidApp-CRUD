@@ -14,26 +14,29 @@ import com.example.almazon.activities.WelcomeActivity;
 import com.example.almazon.models.Company;
 import com.example.almazon.models.User;
 import com.example.almazon.models.UserPrivilege;
-import com.example.almazon.utils.security.AsymmetricEncryption;
 import com.example.almazon.models.UserStatus;
 import com.example.almazon.retrofit.UserApiService;
+import com.example.almazon.utils.security.AsymmetricEncryption;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.util.List;
 
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final String TAG = MainActivity.class.getSimpleName();
-    static final String BASE_URL = "http://192.168.1.54:8080/CRUD-Server/webresources/";
+    static final String BASE_URL = "http://192.168.20.158:8080/CRUD-Server/webresources/";
     static Retrofit retrofit = null;
-    private AsymmetricEncryption  ae;
+    private AsymmetricEncryption ae;
     private String pk;
 
     public static final int WELCOME_ACTIVITY = 1;
@@ -42,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText txtUser = null;
     private EditText txtPassword = null;
     private User user;
-
 
 
     @Override
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         user = new User();
         usuarioPrueba();
 
-        txtUser =  findViewById(R.id.txtUsername);
+        txtUser = findViewById(R.id.txtUsername);
         txtUser.requestFocus();
         txtPassword = findViewById(R.id.txtPassword);
         login = findViewById(R.id.btnLogin);
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
+
         }
         UserApiService userApiService = retrofit.create(UserApiService.class);
         Call<String> call = userApiService.getPublicKey();
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<String> call, Response<String> response) {
                 ae = new AsymmetricEncryption(response.body());
             }
+
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
                 Log.e(TAG, throwable.toString());
@@ -91,24 +95,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Intent welcomeActivity=new Intent(this, WelcomeActivity.class);
-        welcomeActivity.putExtra("user",user);
+        Intent welcomeActivity = new Intent(this, WelcomeActivity.class);
+        welcomeActivity.putExtra("user", user);
         startActivity(welcomeActivity);
-        /*User user = new User();
-        user.setUsername("hensly");
+        User user = new User();
+        user.setUsername("mikelputa");
         user.setPassword(ae.encryptString("1234$%Mm"));
         UserApiService userApiService = retrofit.create(UserApiService.class);
+
+
         Call<User> call = userApiService.loginUser(user);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                System.out.println("AAAAAAAAAAAAAAA");
+
+                System.out.println("Codigo error: " + response.code());
+             if(response.code() == 500){
+                 System.out.println("Triste");
+             }else{
+                 System.out.println("No triste");
+             }
+
+                User pelotas = response.body();
+                System.out.println(pelotas.getEmail());
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable throwable) {
+
+                System.out.println(throwable.getCause());
+                System.out.println(call.request().body());
                 System.out.println("BBBBBBBBBBBBBBB");
+
             }
-        });*/
+        });
     }
 
     public User getUser() {
@@ -119,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.user = user;
     }
 
-    public void usuarioPrueba(){
+    public void usuarioPrueba() {
         this.user.setName("Lola");
         this.user.setUsername("Dolores");
         this.user.setPassword("abcd*1234");
