@@ -22,6 +22,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,7 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final String TAG = MainActivity.class.getSimpleName();
-    static final String BASE_URL = "http://192.168.0.29:8080/CRUD-Server/webresources/";
+    static final String BASE_URL = "http://192.168.1.54:8080/CRUD-Server/webresources/";
     static Retrofit retrofit = null;
     private AsymmetricEncryption  ae;
     private String pk;
@@ -79,11 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                /*Aqui se accede al String de la public Key con el metodo response.body();
-                ¿Hay que asignarselo a una variable y, cuando hagamos el login, encriptarlo?
-                 */
                 ae = new AsymmetricEncryption(response.body());
-                System.out.println("mikel maricón");
             }
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
@@ -94,11 +91,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        /*Intent welcomeActivity=new Intent(this, WelcomeActivity.class);
+        Intent welcomeActivity=new Intent(this, WelcomeActivity.class);
         welcomeActivity.putExtra("user",user);
-        startActivity(welcomeActivity);*/
-        User user = new User();
-        user.setUsername("mikel");
+        startActivity(welcomeActivity);
+        /*User user = new User();
+        user.setUsername("hensly");
         user.setPassword(ae.encryptString("1234$%Mm"));
         UserApiService userApiService = retrofit.create(UserApiService.class);
         Call<User> call = userApiService.loginUser(user);
@@ -111,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onFailure(Call<User> call, Throwable throwable) {
                 System.out.println("BBBBBBBBBBBBBBB");
             }
-        });
+        });*/
     }
 
     public User getUser() {
