@@ -38,14 +38,14 @@ public class ProductManagerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ProductREST pr = new ProductREST(getApplicationContext());
-                Product e = pr.getProduct("1", new OnProductResponse() {
+                Product e = pr.getProduct(searchField.getText().toString(), new OnProductResponse() {
 
                     @Override
                     public void product(Product product) {
                         // CALLBACK
                         product_name.setText(product.getName());
-                        product_price.setText((int) product.getPrice());
-                        product_weight.setText((int) product.getWeight());
+                        product_price.setText(Float.toString(product.getPrice()));
+                        product_weight.setText(Float.toString(product.getWeight()));
                     }
                 });
             }
