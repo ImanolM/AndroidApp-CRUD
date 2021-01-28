@@ -23,11 +23,13 @@ import com.example.almazon.models.User;
 import com.example.almazon.models.UserPrivilege;
 import com.example.almazon.models.UserStatus;
 import com.example.almazon.retrofit.UserApiService;
+import com.example.almazon.utils.database.Users;
 import com.example.almazon.utils.security.AsymmetricEncryption;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.RequestBody;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private AsymmetricEncryption ae;
     private String pk;
     private CheckBox checkBox;
+    private ArrayList<Users> users;
 
     public static final int WELCOME_ACTIVITY = 1;
 
@@ -62,8 +65,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        users = new ArrayList<>();
         db = openOrCreateDatabase("androidapp_crud", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS user (username VARCHAR, password VARCHAR)");
+
+        Cursor cursorSqlite = db.rawQuery("SELECT username, password FROM user", null);
+        while (cursorSqlite.moveToNext()) {
+            Users usersSqlite = new Users();
+            usersSqlite.setUsername(cursorSqlite.getString(cursorSqlite.getColumnIndex("username")));
+            usersSqlite.setPassword(cursorSqlite.getString(cursorSqlite.getColumnIndex("password")));
+            users.add(usersSqlite);
+        }
+        cursorSqlite.close();
 
         checkBox = findViewById(R.id.checkBox);
         connect();
@@ -72,16 +86,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtUser = findViewById(R.id.txtUsername);
         txtUser.requestFocus();
         txtPassword = findViewById(R.id.txtPassword);
-        // Si hay un usuario guardado en el SQLite, cargar automaticamente en los TextFields
-        Cursor cursor = db.rawQuery("SELECT username, password FROM user", null);
-        if (cursor.moveToFirst()) {
-            txtUser.setText(cursor.getString(cursor.getColumnIndex("username")));
-            txtPassword.setText(cursor.getString(cursor.getColumnIndex("password")));
-        }
-        cursor.close();
         login = findViewById(R.id.btnLogin);
         login.setOnClickListener(this);
-
+        if (txtPassword.isFocused() && txtUser.getText().equals("")) {
+            
+        }
     }
 
 
@@ -130,17 +139,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.code() == 500) {
+                        if (response.body() == null) {
                             Toast.makeText(getApplicationContext(), "Login incorrecto.", Toast.LENGTH_SHORT).show();
                         } else {
                             if (checkBox.isChecked()) {
                                 // Guardamos en variables las credenciales del usuario para meterlos a la DB posteriormente
                                 String username = txtUser.getText().toString();
                                 String password = txtPassword.getText().toString();
-                                // Borramos los datos de la tabla si ha habido un usuario anteriormente guardado
-                                db.delete("user", null, null);
-                                // Insertamos los datos del nuevo usuario
-                                db.execSQL("INSERT INTO user VALUES ('" + username + "','" + password + "')");
+                                Cursor cursorExisteUser = db.rawQuery("SELECT username FROM user WHERE username LIKE '" + username + "'", null);
+                                if (!cursorExisteUser.moveToFirst()) {
+                                    // Insertamos los datos del nuevo usuario
+                                    db.execSQL("INSERT INTO user VALUES ('" + username + "','" + password + "')");
+                                }
+                                cursorExisteUser.close();
                             }
                             Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
                             intent.putExtra("user", response.body());
