@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                             Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
                             intent.putExtra("user", response.body());
-                            startActivity(intent);
+                            startActivityForResult(intent, DASHBOARD_ACTIVITY);
                         }
                     }
 
