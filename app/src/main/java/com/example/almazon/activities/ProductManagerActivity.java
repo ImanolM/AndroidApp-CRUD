@@ -19,6 +19,7 @@ public class ProductManagerActivity extends AppCompatActivity {
     private EditText product_name;
     private EditText product_price;
     private EditText product_weight;
+    private Button updateButton;
 
     public static Product currentProduct = null;
 
@@ -28,6 +29,7 @@ public class ProductManagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_manager);
         product_name = findViewById(R.id.product_name);
         product_price = findViewById(R.id.product_price);
+        updateButton = findViewById(R.id.btn_update);
         product_weight = findViewById(R.id.product_weight);
         searchButton = findViewById(R.id.btn_search);
         searchField = findViewById(R.id.searchField);
@@ -46,8 +48,22 @@ public class ProductManagerActivity extends AppCompatActivity {
                         product_name.setText(product.getName());
                         product_price.setText(Float.toString(product.getPrice()));
                         product_weight.setText(Float.toString(product.getWeight()));
+                        currentProduct = product;
                     }
                 });
+            }
+        });
+
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Product product = currentProduct;
+                product.setName(product_name.getText().toString());
+                product.setPrice(Float.parseFloat(product_price.getText().toString()));
+                product.setWeight(Float.parseFloat(product_weight.getText().toString()));
+                System.out.println(product.getName());
+                ProductREST pr = new ProductREST(getApplicationContext());
+                pr.updateProduct(product);
             }
         });
     }
