@@ -43,7 +43,6 @@ public class ProductManagerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ProductREST pr = new ProductREST(getApplicationContext());
                 Product e = pr.getProduct(searchField.getText().toString(), new OnProductResponse() {
-
                     @Override
                     public void product(Product product) {
                         // CALLBACK
@@ -63,7 +62,6 @@ public class ProductManagerActivity extends AppCompatActivity {
                 product.setName(product_name.getText().toString());
                 product.setPrice(Float.parseFloat(product_price.getText().toString()));
                 product.setWeight(Float.parseFloat(product_weight.getText().toString()));
-                System.out.println(product.getName());
                 ProductREST pr = new ProductREST(getApplicationContext());
                 pr.updateProduct(product);
             }
@@ -73,9 +71,8 @@ public class ProductManagerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Product product = currentProduct;
-
                 ProductREST pr = new ProductREST(getApplicationContext());
-                pr.deleteProduct(product.getId().toString() );
+                pr.deleteProduct(product.getId().toString());
             }
         });
     }
