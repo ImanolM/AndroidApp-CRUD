@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.almazon.MainActivity;
 import com.example.almazon.R;
+import com.example.almazon.models.User;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -34,6 +35,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public ProgressBar progressBar;
     public Integer total;
     public CountDownTimer cdt;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         setupMediaPlayer();
 
-        getIntent().getSerializableExtra("user");
+        this.user= (User) getIntent().getSerializableExtra("user");
         imageAlmazon= (ImageView)findViewById(R.id.imageAlmazon);
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
         imageAlmazon.startAnimation(myFadeInAnimation);
@@ -110,6 +112,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onFinish() {
                 // Here do what you like...
                 Intent intent = new Intent(context, DashboardActivity.class);
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
         }.start();
