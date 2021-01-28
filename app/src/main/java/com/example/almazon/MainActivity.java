@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<String> call, Response<String> response) {
                 ae = new AsymmetricEncryption(response.body());
                 isPublicKeyReady = true;
-               // System.out.println("Public key recogida.");
-              //  System.out.println("Public key: " + response.body());
+                System.out.println("Public key recogida.");
+                System.out.println("Public key: " + response.body());
             }
 
             @Override
