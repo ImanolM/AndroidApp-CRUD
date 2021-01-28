@@ -1,10 +1,14 @@
 package com.example.almazon;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,12 +40,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    protected static SQLiteDatabase db = null;
     static final String TAG = MainActivity.class.getSimpleName();
-    public static final String BASE_URL = "http://192.168.0.29:8080/CRUD-Server/webresources/";
+    public static final String BASE_URL = "http://192.168.0.19:8080/CRUD-Server/webresources/";
     public static final int DASHBOARD_ACTIVITY = 3;
     static Retrofit retrofit = null;
     private AsymmetricEncryption ae;
     private String pk;
+    private CheckBox checkBox;
 
     public static final int WELCOME_ACTIVITY = 1;
 
@@ -56,11 +62,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        db = openOrCreateDatabase("androidapp_crud", Context.MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS user (username VARCHAR, password VARCHAR)");
+
+        checkBox = findViewById(R.id.checkBox);
         connect();
         user = new User();
+
         txtUser = findViewById(R.id.txtUsername);
         txtUser.requestFocus();
         txtPassword = findViewById(R.id.txtPassword);
+        // Si hay un usuario guardado en el SQLite, cargar automaticamente en los TextFields
+        Cursor cursor = db.rawQuery("SELECT username, password FROM user", null);
+        if (cursor.moveToFirst()) {
+            txtUser.setText(cursor.getString(cursor.getColumnIndex("username")));
+            txtPassword.setText(cursor.getString(cursor.getColumnIndex("password")));
+        }
+        cursor.close();
         login = findViewById(R.id.btnLogin);
         login.setOnClickListener(this);
 
@@ -115,6 +133,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (response.code() == 500) {
                             Toast.makeText(getApplicationContext(), "Login incorrecto.", Toast.LENGTH_SHORT).show();
                         } else {
+                            if (checkBox.isChecked()) {
+                                // Guardamos en variables las credenciales del usuario para meterlos a la DB posteriormente
+                                String username = txtUser.getText().toString();
+                                String password = txtPassword.getText().toString();
+                                // Borramos los datos de la tabla si ha habido un usuario anteriormente guardado
+                                db.delete("user", null, null);
+                                // Insertamos los datos del nuevo usuario
+                                db.execSQL("INSERT INTO user VALUES ('" + username + "','" + password + "')");
+                            }
                             Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
                             intent.putExtra("user", response.body());
                             startActivityForResult(intent, DASHBOARD_ACTIVITY);
