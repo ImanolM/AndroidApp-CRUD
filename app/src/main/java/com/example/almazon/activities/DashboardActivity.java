@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.almazon.MainActivity;
 import com.example.almazon.R;
 import com.google.android.material.navigation.NavigationView;
 import com.example.almazon.models.User;
@@ -18,6 +19,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     private User user;
     private TextView welcome;
+    public static final int CREATE_PRODUCT = 4;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +48,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         // Comprobamos cual item a sido seleccionado y segun cual ha sido, hacer las acciones
         // necesarias
         if (id == R.id.itemCreateProduct) {
-            Intent welcomeActivity = new Intent(this, CreateProductActivity.class);
-            startActivity(welcomeActivity);
+            Intent intent = new Intent(DashboardActivity.this, CreateProductActivity.class);
+            intent.putExtra("user", user);
+            startActivityForResult(intent, CREATE_PRODUCT);
         } else if (id == R.id.itemProductManager) {
             Intent welcomeActivity = new Intent(this, ProductManagerActivity.class);
             startActivity(welcomeActivity);

@@ -37,7 +37,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final String TAG = MainActivity.class.getSimpleName();
-    static final String BASE_URL = "http://192.168.20.76:8080/CRUD-Server/webresources/";
+    public static final String BASE_URL = "http://192.168.20.76:8080/CRUD-Server/webresources/";
     public static final int DASHBOARD_ACTIVITY = 3;
     static Retrofit retrofit = null;
     private AsymmetricEncryption ae;
