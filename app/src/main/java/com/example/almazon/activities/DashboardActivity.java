@@ -30,9 +30,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         Intent intent = getIntent();
         this.user = (User) intent.getSerializableExtra("user");
 
-
         this.welcome = (TextView) findViewById(R.id.txt_greeting);
-        welcome.setText(user.getName());
+        welcome.setText("Welcome, " + user.getName());
         // Cogemos el NavigationMenu, que es donde estan todos los componentes, y le asignamos
         // el listener para estar a la escucha cuando el usuario clicke en algun elemento del
         // menu. Los siguientes items del menu estan asignanos en /res/menu/my_navigation_items.xml
@@ -60,7 +59,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         // de vista, con lo cual esta animacion seria algo useless
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-
         return true;
     }
 }
