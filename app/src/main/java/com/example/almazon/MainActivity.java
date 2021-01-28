@@ -66,10 +66,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Creamos un nuevo ArrayList para posteriormente guardar los usuarios y contraseñas del SQLite
         users = new ArrayList<>();
+        // Creamos el SQLite y la tabla para guardar los diferentes usuarios
         db = openOrCreateDatabase("androidapp_crud", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS user (username VARCHAR, password VARCHAR)");
 
+        // Comprobar si hay usuarios en SQLite y guardarlos en el ArrayList
         Cursor cursorSqlite = db.rawQuery("SELECT username, password FROM user", null);
         while (cursorSqlite.moveToNext()) {
             Users usersSqlite = new Users();
@@ -88,9 +91,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtPassword = findViewById(R.id.txtPassword);
         login = findViewById(R.id.btnLogin);
         login.setOnClickListener(this);
-        if (txtPassword.isFocused() && txtUser.getText().equals("")) {
-            
-        }
+        // Listener para cuando este el foco en el TextField de password
+        txtPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Si el foco está en el TextField de password y el TextField de username no está
+                // vacío, comprobar el contenido del TextField de username con el username de los
+                // usuarios que había en SQLite. Si coinciden, coger la contraseña de dicho usuario
+                // y ponerlo automáticamente en el TextField de password
+                if (hasFocus && !txtUser.getText().toString().equals("")) {
+                    for (Users userPass : users) {
+                        if (userPass.getUsername().equalsIgnoreCase(txtUser.getText().toString())) {
+                            txtPassword.setText(userPass.getPassword());
+                            break;
+                        }
+                    }
+                }
+            }
+        });
     }
 
 
