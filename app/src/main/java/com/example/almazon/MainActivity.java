@@ -22,6 +22,7 @@ import com.example.almazon.models.Company;
 import com.example.almazon.models.User;
 import com.example.almazon.models.UserPrivilege;
 import com.example.almazon.models.UserStatus;
+import com.example.almazon.retrofit.RetroFitInstancer;
 import com.example.almazon.retrofit.UserApiService;
 import com.example.almazon.utils.database.Users;
 import com.example.almazon.utils.security.AsymmetricEncryption;
@@ -44,7 +45,6 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     protected static SQLiteDatabase db = null;
     static final String TAG = MainActivity.class.getSimpleName();
-    public static final String BASE_URL = "http://192.168.0.19:8080/CRUD-Server/webresources/";
     public static final int DASHBOARD_ACTIVITY = 3;
     static Retrofit retrofit = null;
     private AsymmetricEncryption ae;
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setLenient()
                     .create();
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(RetroFitInstancer.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
 
@@ -113,8 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<String> call, Response<String> response) {
                 ae = new AsymmetricEncryption(response.body());
                 isPublicKeyReady = true;
-                System.out.println("Public key recogida.");
-                System.out.println("Public key: " + response.body());
+
             }
 
             @Override

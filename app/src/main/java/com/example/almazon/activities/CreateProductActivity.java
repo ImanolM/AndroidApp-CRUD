@@ -11,11 +11,13 @@ import android.widget.Toast;
 
 import com.example.almazon.MainActivity;
 import com.example.almazon.R;
+import com.example.almazon.exceptions.StringIsEmptyException;
 import com.example.almazon.models.Product;
 import com.example.almazon.models.User;
 import com.example.almazon.retrofit.ProductApiService;
 import com.example.almazon.retrofit.ProductREST;
 import com.example.almazon.retrofit.UserApiService;
+import com.example.almazon.validations.GenericValidations;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -29,6 +31,7 @@ public class CreateProductActivity extends AppCompatActivity implements View.OnC
 
     private Button btn_sendProduct = null;
     private EditText txt_productName = null;
+    private GenericValidations genericValidations = new GenericValidations();
     private EditText txt_productUnit = null;
     private EditText txt_productWeight = null;
     Product product = null;
@@ -52,15 +55,27 @@ public class CreateProductActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-        product = new Product();
-        product.setName(txt_productName.getText().toString());
-        float numberUnit = Float.valueOf(txt_productUnit.getText().toString());
-        float numberWeight = Float.valueOf(txt_productWeight.getText().toString());
-        product.setPrice(numberUnit);
-        product.setWeight(numberWeight);
-        product.setUser(user);
-
-        new ProductREST(getApplicationContext()).createProduct(product);
+        try {
+            genericValidations.checkIfStringIsEmpty(txt_productName.getText().toString());
+            genericValidations.checkIfValueIsFloat(txt_productUnit.getText().toString());
+            genericValidations.checkIfValueIsFloat(txt_productWeight.getText().toString());
+            product = new Product();
+            product.setName(txt_productName.getText().toString());
+            float numberUnit = Float.valueOf(txt_productUnit.getText().toString());
+            float numberWeight = Float.valueOf(txt_productWeight.getText().toString());
+            product.setPrice(numberUnit);
+            product.setWeight(numberWeight);
+            product.setUser(user);
+            new ProductREST(getApplicationContext()).createProduct(product);
+            txt_productWeight.setText("");
+            txt_productName.setText("");
+            txt_productUnit.setText("");
+            Toast.makeText(getApplicationContext(), "Producto creado correctamente.", Toast.LENGTH_SHORT).show();
+        } catch (NumberFormatException e) {
+            Toast.makeText(getApplicationContext(), "Algunos campos que deberían ser números no lo son.", Toast.LENGTH_SHORT).show();
+        } catch (StringIsEmptyException e) {
+            Toast.makeText(getApplicationContext(), "El campo de nombre está vacío.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

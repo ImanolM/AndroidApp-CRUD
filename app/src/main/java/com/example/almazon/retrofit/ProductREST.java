@@ -27,12 +27,7 @@ public class ProductREST {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
 
-                System.out.println("Codigo http: " + response.code());
-                if (response.code() == 500) {
-                    Toast.makeText(context, "Login incorrecto.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Oleee.", Toast.LENGTH_SHORT).show();
-                }
+
             }
 
             @Override
@@ -49,17 +44,11 @@ public class ProductREST {
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-
-                Toast.makeText(context, "Oleee.", Toast.LENGTH_SHORT).show();
-                System.out.println(response.body().getName());
-                //product = response.body();
                 callback.product(response.body());
-
             }
 
             @Override
             public void onFailure(Call<Product> call, Throwable throwable) {
-                Toast.makeText(context, "Eror al conectar con el servidor.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -74,10 +63,6 @@ public class ProductREST {
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-
-                Toast.makeText(context, "Oleee.", Toast.LENGTH_SHORT).show();
-
-
             }
 
             @Override
@@ -93,10 +78,6 @@ public class ProductREST {
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-
-                Toast.makeText(context, "Oleee.", Toast.LENGTH_SHORT).show();
-
-
             }
 
             @Override
