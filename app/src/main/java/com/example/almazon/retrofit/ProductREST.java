@@ -87,4 +87,23 @@ public class ProductREST {
         });
     }
 
+    public void deleteProduct(String id) {
+        ProductApiService productApiService = retrofit.create(ProductApiService.class);
+        Call<Product> call = productApiService.deleteProduct(id);
+        call.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+
+                Toast.makeText(context, "Oleee.", Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable throwable) {
+                Toast.makeText(context, "Eror al conectar con el servidor.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

@@ -5,6 +5,7 @@ import com.example.almazon.models.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -24,4 +25,7 @@ public interface ProductApiService {
     @PUT("product")
     Call<Product> updateProduct(@Body Product product);
 
+
+    @DELETE("product/{id}")
+    Call<Product> deleteProduct(@Path("id") String id);
 }
