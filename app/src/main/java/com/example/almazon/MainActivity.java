@@ -142,9 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 // Insertamos los datos del nuevo usuario
                                 db.execSQL("INSERT INTO user VALUES ('" + username + "','" + password + "')");
                             }
-                            Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+                            Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
                             intent.putExtra("user", response.body());
-                            startActivityForResult(intent, DASHBOARD_ACTIVITY);
+                            startActivity(intent);
                         }
                     }
 
