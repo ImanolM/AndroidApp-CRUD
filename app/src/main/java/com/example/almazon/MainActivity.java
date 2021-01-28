@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.almazon.activities.DashboardActivity;
 import com.example.almazon.activities.WelcomeActivity;
+import com.example.almazon.exceptions.PublicKeyNotFoundException;
 import com.example.almazon.models.Company;
 import com.example.almazon.models.User;
 import com.example.almazon.models.UserPrivilege;
@@ -36,7 +37,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final String TAG = MainActivity.class.getSimpleName();
-    static final String BASE_URL = "http://192.168.0.29:8080/CRUD-Server/webresources/";
+    static final String BASE_URL = "http://192.168.20.76:8080/CRUD-Server/webresources/";
     public static final int DASHBOARD_ACTIVITY = 3;
     static Retrofit retrofit = null;
     private AsymmetricEncryption ae;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button login = null;
     private EditText txtUser;
     private EditText txtPassword;
+    private boolean isPublicKeyReady = false;
     private User user;
 
 
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 ae = new AsymmetricEncryption(response.body());
+                isPublicKeyReady = true;
                 System.out.println("Public key recogida.");
                 System.out.println("Public key: " + response.body());
             }
@@ -100,37 +103,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        User user = new User();
-        user.setUsername(txtUser.getText().toString());
-        user.setPassword(ae.encryptString(txtPassword.getText().toString()));
-        UserApiService userApiService = retrofit.create(UserApiService.class);
+        if (!isPublicKeyReady) {
+            Toast.makeText(getApplicationContext(), "No puedes iniciar sesión porque ha habido un error al conectarse con el servidor y conseguir la clave pública.", Toast.LENGTH_SHORT).show();
+        } else {
+            User user = new User();
+            user.setUsername(txtUser.getText().toString());
+            user.setPassword(ae.encryptString(txtPassword.getText().toString()));
+            UserApiService userApiService = retrofit.create(UserApiService.class);
+            Call<User> call = userApiService.loginUser(user);
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
 
-
-
-        Call<User> call = userApiService.loginUser(user);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-
-                System.out.println("Codigo http: " + response.code());
-                if (response.code() == 500) {
-                    Toast.makeText(getApplicationContext(), "Login incorrecto.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
-                    intent.putExtra("user", response.body());
-                    System.out.println(response.body().getEmail());
-                    startActivityForResult(intent, DASHBOARD_ACTIVITY);
+                    System.out.println("Codigo http: " + response.code());
+                    if (response.code() == 500) {
+                        Toast.makeText(getApplicationContext(), "Login incorrecto.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+                        intent.putExtra("user", response.body());
+                        System.out.println(response.body().getEmail());
+                        startActivityForResult(intent, DASHBOARD_ACTIVITY);
+                    }
                 }
 
-            }
+                @Override
+                public void onFailure(Call<User> call, Throwable throwable) {
+                    Toast.makeText(getApplicationContext(), "Eror al conectar con el servidor.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable throwable) {
-
-                Toast.makeText(getApplicationContext(), "Eror al conectar con el servidor.", Toast.LENGTH_SHORT).show();
-
-            }
-        });
     }
 
     public User getUser() {
