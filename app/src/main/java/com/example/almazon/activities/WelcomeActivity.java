@@ -68,9 +68,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 int total = (int) (((float)finishedSeconds / (float)oneMin) * 100.0);
                 progressBar.setProgress(total);
 
-//                //backward progress
-//                int total = (int) (((float) millisUntilFinished / (float) oneMin) * 100.0);
-//                progressBar.setProgress(total);
 
             }
 

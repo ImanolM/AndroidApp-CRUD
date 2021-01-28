@@ -47,8 +47,8 @@ public class ProductManagerActivity extends AppCompatActivity {
                 ProductREST productRest = new ProductREST(getApplicationContext());
                 try {
                     genericValidations.checkIfStringIsEmpty(searchField.getText().toString());
+                    // Un callback de product que había que hacer porque la llamada es asíncrona
                     productRest.getProduct(searchField.getText().toString(), new OnProductResponse() {
-
                         @Override
                         public void product(Product product) {
                             // CALLBACK
@@ -75,6 +75,7 @@ public class ProductManagerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Product product = currentProduct;
                 try {
+                    // Comprueba que los campos sean correctos y en caso de serlos hace una update
                     genericValidations.checkIfStringIsEmpty(product_name.getText().toString());
                     genericValidations.checkIfValueIsFloat(product_price.getText().toString());
                     genericValidations.checkIfValueIsFloat(product_weight.getText().toString());
@@ -96,6 +97,7 @@ public class ProductManagerActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Elimina el producto y vacía los campos
                 Product product = currentProduct;
                 ProductREST pr = new ProductREST(getApplicationContext());
                 pr.deleteProduct(product.getId().toString());
