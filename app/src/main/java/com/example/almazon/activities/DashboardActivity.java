@@ -15,6 +15,11 @@ import com.example.almazon.R;
 import com.google.android.material.navigation.NavigationView;
 import com.example.almazon.models.User;
 
+/**
+ * Actividad que se encarga de dar la bienvenida al usuario con su nombre. Contiene menú desplegable
+ * a su izquierda para poder hacer dos operaciones: crear producto y gestionar producto existente
+ * en base de datos.
+ */
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private User user;
@@ -27,6 +32,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        //Obtiene usuario desde WelcomeActivity, que a su vez lo transporta desde el MainActivity.
         Intent intent = getIntent();
         this.user = (User) intent.getSerializableExtra("user");
 

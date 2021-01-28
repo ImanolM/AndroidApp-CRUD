@@ -2,33 +2,33 @@ package com.example.almazon.models;
 
 import java.io.Serializable;
 
+/**
+ * Clase que contiene los atributos de compañía: id, name, type, localization.
+ */
 public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Identification field of the Company.
+     * Identificador de la compañia.
      */
     private long id;
 
     /**
-     * Name of the Company.
+     * Nombre de la compañia.
      */
     private String name;
 
     /**
-     * Type of the Company.
+     * Tipo de la compañia.
      */
     private CompanyType type;
 
     /**
-     * Localization of the Company.
+     * Localización de la compañia.
      */
     private String localization;
 
-    /**
-     * The constructor without parameters for the Company model.
-     */
     public Company() {
 
     }

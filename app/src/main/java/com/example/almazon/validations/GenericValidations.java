@@ -2,6 +2,9 @@ package com.example.almazon.validations;
 
 import com.example.almazon.exceptions.StringIsEmptyException;
 
+/**
+ * Clase que contiene distintas validaciones de campos.
+ */
 public class GenericValidations {
 
     public GenericValidations() {

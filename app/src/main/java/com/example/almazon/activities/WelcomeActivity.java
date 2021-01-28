@@ -22,6 +22,10 @@ import com.example.almazon.MainActivity;
 import com.example.almazon.R;
 import com.example.almazon.models.User;
 
+/**
+ * Actividad de transición entre el login y el dashboard. Contiene una animación de bienvenida, una
+ * transición del logo de la empresa, un sonido y un progressbar.
+ */
 public class WelcomeActivity extends AppCompatActivity {
 
     private Integer anchoPantalla;
@@ -49,6 +53,7 @@ public class WelcomeActivity extends AppCompatActivity {
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
         imageAlmazon.startAnimation(myFadeInAnimation);
 
+        //Ejecuta el audio.
         mediaPlayer.start();
 
         context = this;
@@ -56,28 +61,27 @@ public class WelcomeActivity extends AppCompatActivity {
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        // timer for seekbar
-        final int oneMin = 1 * 7 * 1000; // 1 minute in milli seconds
+        //Establece el tiempo que va a durar el progressbar en llenarse.
+        final int oneMin = 1 * 7 * 1000;
 
-        /** CountDownTimer starts with 1 minutes and every onTick is 1 second */
+        //Cambia graficamente el progreso de la barra segun el tiempo transcurrido.
         new CountDownTimer(oneMin, 1000) {
             public void onTick(long millisUntilFinished) {
-
-                //forward progress
                 long finishedSeconds = oneMin - millisUntilFinished;
                 int total = (int) (((float)finishedSeconds / (float)oneMin) * 100.0);
                 progressBar.setProgress(total);
-
-
             }
-
             public void onFinish() {
-                // DO something when 1 minute is up
+                //Acción a realizar en caso de superar el minuto. Nunca se llega a ejecutar en
+                //este caso.
             }
         }.start();
 
     }
 
+    /**
+     * Obtiene el audio del archivo de recursos.
+     */
     private void setupMediaPlayer() {
         mediaPlayer = new MediaPlayer();
         Context context = getApplicationContext();
@@ -86,28 +90,33 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
 
-    /** Starts the timer **/
+    /**
+     * Comienza la cuenta.
+     */
     public void startTimer() {
         setTimerStartListener();
         timerStopped = false;
     }
 
-    /** Stop the timer **/
+    /**
+     * Para la cuenta.
+     */
     public void stopTimer() {
         countDownTimer.cancel();
         timerStopped = true;
     }
 
-    /** Timer method: CountDownTimer **/
+    /**
+     * Método que va a establecer cuanto va a durar esta actividad.
+     */
     private void setTimerStartListener() {
-        // will be called at every 1500 milliseconds i.e. every 1.5 second.
+
         countDownTimer = new CountDownTimer(7500, 7500) {
             public void onTick(long millisUntilFinished) {
 
             }
-
             public void onFinish() {
-                // Here do what you like...
+                //Al acabar la cuenta, realizar un intent a dashboard.
                 Intent intent = new Intent(context, DashboardActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);

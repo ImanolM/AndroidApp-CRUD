@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .build();
 
         }
-        // llama al create del userApiService
+        // llama al create del userApiService para obtener clave pública
         UserApiService userApiService = retrofit.create(UserApiService.class);
         Call<String> call = userApiService.getPublicKey();
         call.enqueue(new Callback<String>() {
@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        //Toast indicando que no has podido recibir la clave pública.
         if (!isPublicKeyReady) {
             Toast.makeText(getApplicationContext(), "No puedes iniciar sesión porque ha habido un error al conectarse con el servidor y conseguir la clave pública.", Toast.LENGTH_SHORT).show();
         } else {
@@ -157,6 +158,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
+                        //Toast en caso de no haber recibido ningun usuario, debido a que los valores
+                        //han sido incorrectos.
                         if (response.body() == null) {
                             Toast.makeText(getApplicationContext(), "Login incorrecto.", Toast.LENGTH_SHORT).show();
                         } else {
@@ -171,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 }
                                 cursorExisteUser.close();
                             }
+                            //Realiar intent a dashboard en caso de login correcto. Se envia usuario a la siguiente actividad.
                             Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
                             intent.putExtra("user", response.body());
                             startActivityForResult(intent, DASHBOARD_ACTIVITY);
@@ -179,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<User> call, Throwable throwable) {
-                        Toast.makeText(getApplicationContext(), "Eror al conectar con el servidor.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error al conectar con el servidor.", Toast.LENGTH_SHORT).show();
                     }
                 });
             } catch (Exception e) {

@@ -1,91 +1,62 @@
 package com.example.almazon.models;
 
+/**
+ * Clase que contiene los atributos del producto: id, weight, price, name y user.
+ */
 public class Product {
 
     private static final long serialVersionUID = 1L;
     /**
-     * Identification field for the product.
+     * Identificador del producto.
      */
     private Integer id;
     /**
-     * The weight of the product.
+     * Peso del producto.
      */
     private float weight;
     /**
-     * The price of the product.
+     * Precio del producto.
      */
     private float price;
     /**
-     * The name of the product.
+     * Nombre del producto.
      */
     private String name;
 
-    /**
-     *
-     * @return the id
-     */
     public Integer getId() {
         return id;
     }
 
-    /**
-     *
-     * @param id the id to be set
-     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /**
-     *
-     * @return the weight
-     */
     public float getWeight() {
         return weight;
     }
 
-    /**
-     *
-     * @param weight the weight to be set
-     */
     public void setWeight(float weight) {
         this.weight = weight;
     }
 
-    /**
-     *
-     * @return the price
-     */
     public float getPrice() {
         return price;
     }
 
-    /**
-     *
-     * @param price the price to be set
-     */
     public void setPrice(float price) {
         this.price = price;
     }
 
-    /**
-     *
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     *
-     * @param name the name to be set
-     */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * User for the product.
+     * Usuario que creó el producto.
      */
     private User user;
 

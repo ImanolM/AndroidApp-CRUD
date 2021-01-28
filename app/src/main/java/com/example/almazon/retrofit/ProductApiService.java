@@ -13,6 +13,10 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+/**
+ * Interfaz para realizar operaciones con la entidad producto. Los metodos que contiene realizan las
+ * cuatro operaciones CRUD: creado, consulta, borrado y actualización de producto.
+ */
 public interface ProductApiService {
 
     @POST("product")

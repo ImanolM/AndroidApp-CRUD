@@ -8,80 +8,83 @@ import org.simpleframework.xml.Root;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Clase que contiene los atributos del usuario: id, username, email, name, surname, status,
+ * privilege, password, lastAccess, lastPasswordChange, company.
+ */
 @Root (name="user")
 public class User implements Serializable {
 
 
     private static final long serialVersionUID = 1L;
     /**
-     * The auto generated id of the user.
+     * Id usuario auto-generado.
      */
     @SerializedName("id")
     @Expose
     private Long id;
     /**
-     * The username of the user.
+     * Username del usuario.
      */
     @SerializedName("username")
     @Expose
     private String username;
     /**
-     * The email of the user.
+     * Email del usuario.
      */
     @SerializedName("email")
     @Expose
     private String email;
     /**
-     * The name of the user.
+     * Nombre del usuario.
      */
     @SerializedName("name")
     @Expose
     private String name;
     /**
-     * The Surname of the user
+     * Apellido del usuario.
      */
     @SerializedName("surname")
     @Expose
     private String surname;
 
     /**
-     * The status of the user. Enum.
+     * Estado del usuario.
      */
     @SerializedName("status")
     @Expose
     private UserStatus status;
     /**
-     * The privilege of the user.
+     * Privilegio del usuario.
      */
     @SerializedName("privilege")
     @Expose
     private UserPrivilege privilege;
     /**
-     * The password of the user.
+     * Contraseña del usuario.
      */
     @SerializedName("password")
     @Expose
     private String password;
     /**
-     * The last access of the user.
+     * Fecha ultimo acceso del usuario.
      */
     @SerializedName("lastAccess")
     @Expose
     private Date lastAccess;
     /**
-     * The last passsword change that has been made for this user.
+     * Fecha del ultimo cambio de contraseña del usuario.
      */
     @SerializedName("lastPasswordChange")
     @Expose
     private Date lastPasswordChange;
 
     /**
-     * The company object where this user belongs.
+     * Objeto compañia a la que pertenece el usuario.
      */
     @SerializedName("company")
     @Expose
     private Company company;
-
 
     public User() {
 

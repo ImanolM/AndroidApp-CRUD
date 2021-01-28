@@ -15,6 +15,10 @@ import com.example.almazon.retrofit.OnProductResponse;
 import com.example.almazon.retrofit.ProductREST;
 import com.example.almazon.validations.GenericValidations;
 
+/**
+ * Actividad encargada de gestionar datos sobre productos. Realia operaciones de consulta, borrado y
+ * actualización de producto.
+ */
 public class ProductManagerActivity extends AppCompatActivity {
     private Button searchButton;
     private EditText searchField;

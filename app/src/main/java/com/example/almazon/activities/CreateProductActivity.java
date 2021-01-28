@@ -27,6 +27,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Actividad encargada de realizar el creado de un nuevo producto en la base de datos.
+ */
 public class CreateProductActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btn_sendProduct = null;
@@ -56,6 +59,7 @@ public class CreateProductActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         try {
+            //Se hacen validaciones de los campos informados.
             genericValidations.checkIfStringIsEmpty(txt_productName.getText().toString());
             genericValidations.checkIfValueIsFloat(txt_productUnit.getText().toString());
             genericValidations.checkIfValueIsFloat(txt_productWeight.getText().toString());
